@@ -1,10 +1,17 @@
-// nc_engine.js - Der Übersetzer
+// nc_engine.js - Der Parser-Motor
 const NCEngine = {
-    execute: function(command, payload) {
-        if (command === "print") {
-            console.log("NC-Output: " + payload);
-        } else if (command === "hello") {
-            console.log("Neutral Code sagt: Hello World!");
-        }
+    // Diese Funktion liest den Text aus der .nc Datei
+    parseAndRun: function(content) {
+        const lines = content.split('\n');
+        lines.forEach(line => {
+            // Ignoriere Kommentare mit #
+            if (line.startsWith('#') || line.trim() === "") return;
+
+            // Suche nach einem Befehl
+            if (line.includes("hello")) {
+                console.log("NC Parser: Führe 'hello' aus...");
+                alert("Neutral Code Framework: Hello World!");
+            }
+        });
     }
 };
