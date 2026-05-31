@@ -1,21 +1,14 @@
 const NCCore = {
-    init: async () => {
-        const response = await fetch('demo.nc');
-        const data = await response.text();
-        NCCore.process(data);
+    render: (t, v) => { const e = document.createElement(t); e.innerText = v; document.getElementById('app').appendChild(e); },
+    init: async () => { 
+        const app = document.createElement('div'); app.id = 'app'; document.body.appendChild(app);
+        const r = await fetch('demo.nc'); NCCore.process(await r.text()); 
     },
-    process: (content) => {
-        content.split('\n').forEach(line => {
-            const [cmd, arg] = line.trim().split(':');
-            if (!cmd || cmd.startsWith('#')) return;
-            if (NCCore.actions[cmd]) NCCore.actions[cmd](arg || "");
-            else console.warn(`Unbekannter Befehl: ${cmd}`);
+    process: (c) => {
+        c.split('\n').forEach(l => {
+            const [cmd, ...v] = l.split(':');
+            if(cmd === 'h1' || cmd === 'p' || cmd === 'button') NCCore.render(cmd, v.join(':'));
         });
-    },
-    actions: {
-        hello: () => console.log("NC: Hello World!"),
-        status: () => console.log("NC: System Status Online."),
-        terminal: (arg) => console.log(`%c[NC-TERMINAL] ${arg}`, "color: #0f0; background: #000; padding: 2px;")
     }
 };
 NCCore.init();
