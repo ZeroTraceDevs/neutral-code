@@ -1,2 +1,12 @@
 <!DOCTYPE html>
-<html><body><script src="nc_core.js"></script></body></html>
+<html><body><div id="app"></div><script>
+const NCCore = { actions: { hello: () => alert("NC-Framework aktiv!") }, init: async () => {
+    const r = await fetch('demo.nc'); const t = await r.text();
+    t.split('\n').forEach(l => {
+        const [c, v, a] = l.split(':'); if(!c || c.startsWith('#')) return;
+        const e = document.createElement(c === 'button' ? 'button' : 'div');
+        e.innerText = v; if(a) e.onclick = () => NCCore.actions[a]();
+        document.getElementById('app').appendChild(e);
+    });
+}}; NCCore.init();
+</script></body></html>
