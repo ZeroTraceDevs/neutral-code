@@ -1,21 +1,15 @@
 #!/bin/bash
-# High-Speed NC-Compiler
-# Variablen-Definitionen
-TITLE="Mein System"
+OUTPUT="index.html"
+echo "<html><body>" > "$OUTPUT"
 
-# Build-Prozess
-{
-    echo "<html><body>"
-    while IFS=: read -r tag text; do
-        # Variablen-Ersetzung: {{TITLE}} wird durch $TITLE ersetzt
-        text=${text//\{\{TITLE\}\}/$TITLE}
-        
-        case $tag in
-            h1) echo "<h1>$text</h1>" ;;
-            p)  echo "<p>$text</p>" ;;
-            button) echo "<button>$text</button>" ;;
-        esac
-    done < demo.nc
-    echo "</body></html>"
-} > index.html
-echo "Build fertig!"
+while IFS=: read -r tag part1 part2; do
+    case $tag in
+        h1) echo "<h1>$part1</h1>" >> "$OUTPUT" ;;
+        p)  echo "<p>$part1</p>" >> "$OUTPUT" ;;
+        button) echo "<button>$part1</button>" >> "$OUTPUT" ;;
+        # Hier ist der neue "Link-Modus": link:Text:URL
+        link) echo "<a href='$part2'><button>$part1</button></a>" >> "$OUTPUT" ;;
+    esac
+done < demo.nc
+
+echo "</body></html>" >> "$OUTPUT"
